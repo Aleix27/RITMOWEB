@@ -3,742 +3,1205 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="description" content="RITMO – El festival de música urbana que no entiende de géneros. Solo de ritmo. Reggaeton, Tech House, Techno. El golpe al cambio."/>
+<meta name="description" content="RITMO – El festival de música urbana que no entiende de géneros. Solo de ritmo."/>
 <title>RITMO – El Golpe al Cambio</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          "ritmo-orange": "#FF5F00",
-          "ritmo-black": "#0A0A0A",
-          "ritmo-white": "#FFFFFF",
-        },
-        fontFamily: {
-          "headline": ["Manrope", "sans-serif"],
-          "body": ["Inter", "sans-serif"],
-          "mono": ["Space Grotesk", "monospace"],
-        },
-      },
-    },
-  }
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800;900&family=Inter:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    background-color: #FF5F00;
-    color: #0A0A0A;
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  /* Blueprint grid */
-  .blueprint-grid {
-    background-image:
-      linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
+:root {
+  --orange: #FF5F00;
+  --black: #080808;
+  --white: #FFFFFF;
+}
 
-  /* Diagonal stripes */
-  .diagonal-stripes {
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 8px,
-      rgba(0,0,0,0.06) 8px,
-      rgba(0,0,0,0.06) 16px
-    );
-  }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
 
-  /* Stencil outline text */
-  .stencil-text {
-    -webkit-text-stroke: 2px #0A0A0A;
-    color: transparent;
-    letter-spacing: -0.04em;
-  }
-  .stencil-text-white {
-    -webkit-text-stroke: 2px #FF5F00;
-    color: transparent;
-  }
+/* ============ BLUEPRINT GRID ============ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
+}
 
-  /* Nav */
-  .nav-link {
-    font-weight: 900;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #0A0A0A;
-    transition: opacity 0.2s;
-  }
-  .nav-link:hover { opacity: 0.5; }
+/* ============ NAV ============ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  transition: background 0.4s, padding 0.4s;
+}
+nav.scrolled {
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(12px);
+  padding: 12px 40px;
+  border-bottom: 1px solid rgba(255,95,0,0.2);
+}
+.nav-logo {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: -0.04em;
+}
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-links a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--orange); }
+.nav-cta {
+  background: var(--orange);
+  color: var(--black) !important;
+  padding: 10px 22px;
+  font-weight: 900 !important;
+}
+.nav-cta:hover { background: var(--white); color: var(--black) !important; }
 
-  /* Rotating badge */
-  @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  .spinning { animation: spin-slow 12s linear infinite; }
+.burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.burger span { width: 24px; height: 2px; background: white; display: block; transition: 0.3s; }
 
-  /* Marquee */
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  .marquee-inner {
-    display: flex;
-    width: max-content;
-    animation: marquee 18s linear infinite;
-  }
-  .marquee-inner:hover { animation-play-state: paused; }
+#mobile-nav {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--black);
+  z-index: 199;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+#mobile-nav.open { display: flex; }
+#mobile-nav a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+#mobile-nav a:hover { color: var(--orange); }
+#mobile-nav-close {
+  position: absolute;
+  top: 22px; right: 28px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
 
-  /* Pulse dot */
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-  .pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+/* ============ GLITCH ============ */
+.glitch {
+  position: relative;
+  color: var(--white);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+.glitch::before {
+  color: var(--orange);
+  animation: glitch1 3.5s infinite;
+  clip-path: polygon(0 15%, 100% 15%, 100% 40%, 0 40%);
+}
+.glitch::after {
+  color: #00fff7;
+  animation: glitch2 3.5s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+}
+@keyframes glitch1 {
+  0%,90%,100% { transform: translate(0); opacity: 0; }
+  92% { transform: translate(-4px, 1px); opacity: 0.8; }
+  94% { transform: translate(3px, -1px); opacity: 0.6; }
+  96% { transform: translate(-2px, 2px); opacity: 0; }
+}
+@keyframes glitch2 {
+  0%,90%,100% { transform: translate(0); opacity: 0; }
+  93% { transform: translate(4px, -2px); opacity: 0.7; }
+  95% { transform: translate(-3px, 1px); opacity: 0.5; }
+  97% { transform: translate(2px, 0); opacity: 0; }
+}
 
-  /* Card hover */
-  .tilt-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .tilt-card:hover {
-    transform: rotate(0deg) translateY(-4px) !important;
-    box-shadow: 8px 8px 0px #0A0A0A;
-  }
+/* ============ HERO ============ */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 40px 60px;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 40%, rgba(255,95,0,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(255,95,0,0.08) 0%, transparent 50%);
+  animation: bg-pulse 6s ease-in-out infinite;
+}
+@keyframes bg-pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
 
-  /* Section separator */
-  .sep-line {
-    width: 100%;
-    height: 2px;
-    background: rgba(0,0,0,0.12);
-  }
+/* Big RITMO letters */
+.hero-ritmo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(120px, 22vw, 320px);
+  line-height: 1;
+  color: white;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-align: center;
+  animation: ritmo-in 1.2s cubic-bezier(0.16,1,0.3,1) both;
+  white-space: nowrap;
+}
+@keyframes ritmo-in {
+  from { opacity: 0; transform: translate(-50%, -45%) scale(0.85); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
 
-  /* Button */
-  .btn-black {
-    background: #0A0A0A;
-    color: #FF5F00;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 14px 32px;
-    display: inline-block;
-    text-decoration: none;
-    border: 2px solid #0A0A0A;
-    transition: background 0.2s, color 0.2s;
-  }
-  .btn-black:hover {
-    background: transparent;
-    color: #0A0A0A;
-  }
-  .btn-orange {
-    background: #FF5F00;
-    color: #0A0A0A;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 14px 32px;
-    display: inline-block;
-    text-decoration: none;
-    border: 2px solid #FF5F00;
-    transition: background 0.2s, color 0.2s;
-  }
-  .btn-orange:hover {
-    background: transparent;
-    color: #FF5F00;
-  }
+/* Orange dot between letters effect */
+.hero-ritmo span { display: inline-block; }
 
-  /* Mobile hamburger */
-  #mobile-menu { display: none; }
-  #mobile-menu.open { display: flex; }
+/* Floating orange bar */
+.hero-bar {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 6px;
+  background: var(--orange);
+  transform: translateY(calc(-50% + clamp(60px, 11vw, 160px)));
+  opacity: 0.6;
+  animation: bar-in 1.4s cubic-bezier(0.16,1,0.3,1) both 0.3s;
+}
+@keyframes bar-in {
+  from { transform: translateY(calc(-50% + clamp(60px, 11vw, 160px))) scaleX(0); }
+  to   { transform: translateY(calc(-50% + clamp(60px, 11vw, 160px))) scaleX(1); }
+}
 
-  /* Photo overlay */
-  .photo-overlay {
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
-  }
+.hero-content {
+  position: relative;
+  z-index: 10;
+  animation: content-in 1s ease both 0.6s;
+}
+@keyframes content-in {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-tag::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--orange);
+}
+.hero-title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: clamp(36px, 5.5vw, 80px);
+  color: white;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero-title em { color: var(--orange); font-style: normal; }
+.hero-desc {
+  font-size: clamp(14px, 1.5vw, 18px);
+  color: rgba(255,255,255,0.65);
+  max-width: 440px;
+  line-height: 1.55;
+  margin-bottom: 32px;
+}
+.hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.btn-fill { background: var(--orange); color: var(--black); border: 2px solid var(--orange); }
+.btn-fill:hover { background: var(--white); border-color: var(--white); }
+.btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { border-color: white; }
 
-  /* Genre tag */
-  .genre-tag {
-    border: 2px solid rgba(0,0,0,0.3);
-    background: transparent;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 6px 16px;
-    font-size: 0.75rem;
-  }
+/* Genre tags */
+.genre-row {
+  position: absolute;
+  bottom: 60px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 10;
+  animation: content-in 1s ease both 0.8s;
+}
+.genre-pill {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5);
+  transition: all 0.3s;
+}
+.genre-pill.active { border-color: var(--orange); color: var(--orange); }
+.genre-pill:hover { border-color: white; color: white; }
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: float 2s ease-in-out infinite;
+  z-index: 10;
+  opacity: 0;
+  animation: fade-in-scroll 1s ease both 1.5s, float 2s ease-in-out infinite 2s;
+}
+@keyframes fade-in-scroll { from { opacity: 0; } to { opacity: 0.4; } }
+@keyframes float {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+.scroll-indicator span { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(255,95,0,0.6), transparent); }
+
+/* ============ MARQUEE ============ */
+.marquee-wrap {
+  overflow: hidden;
+  background: var(--orange);
+  padding: 14px 0;
+  position: relative;
+  z-index: 5;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 14s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-item {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.marquee-dot { width: 8px; height: 8px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ============ SECTION BASE ============ */
+section { position: relative; z-index: 1; }
+.section-inner { max-width: 1200px; margin: 0 auto; padding: 100px 40px; }
+.section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--orange);
+}
+.section-title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: white;
+  margin-bottom: 40px;
+}
+.section-title .orange { color: var(--orange); }
+
+/* ============ REVEAL ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+
+/* ============ GÉNEROS ============ */
+#musica { background: var(--black); }
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+.genre-card {
+  border-right: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 50px 40px;
+  transition: background 0.4s, transform 0.3s;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.genre-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.genre-card:hover::before { transform: scaleX(1); }
+.genre-card:hover { background: rgba(255,95,0,0.06); }
+.genre-icon { font-size: 3rem; margin-bottom: 24px; display: block; transition: transform 0.3s; }
+.genre-card:hover .genre-icon { transform: scale(1.15) rotate(-5deg); }
+.genre-name {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.genre-desc { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+.genre-sub { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-top: 20px; }
+
+/* ============ CREADORES ============ */
+#creadores { background: var(--black); }
+.creators-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 60px;
+}
+.creator-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  cursor: pointer;
+  background: #111;
+}
+.creator-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  filter: grayscale(100%) brightness(0.7);
+  transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.creator-card:hover .creator-img {
+  filter: grayscale(0%) brightness(0.85);
+  transform: scale(1.05);
+}
+
+/* Curtain reveal */
+.creator-curtain {
+  position: absolute;
+  inset: 0;
+  background: var(--orange);
+  transform-origin: top;
+  transform: scaleY(1);
+  transition: transform 1s cubic-bezier(0.76,0,0.24,1);
+  z-index: 5;
+}
+.creator-card.revealed .creator-curtain { transform: scaleY(0); }
+
+/* Info overlay */
+.creator-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 40%, transparent 70%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px;
+  z-index: 3;
+}
+.creator-role {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 0.5s 0.3s;
+}
+.creator-card.revealed .creator-role { transform: translateY(0); opacity: 1; }
+.creator-name {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.6s 0.4s;
+}
+.creator-card.revealed .creator-name { transform: translateY(0); opacity: 1; }
+.creator-tag {
+  display: inline-block;
+  margin-top: 12px;
+  background: var(--orange);
+  color: var(--black);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  transform: translateX(-20px);
+  opacity: 0;
+  transition: all 0.5s 0.5s;
+}
+.creator-card.revealed .creator-tag { transform: translateX(0); opacity: 1; }
+
+/* Hover line detail */
+.creator-card::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 4px;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  z-index: 6;
+}
+.creator-card:hover::after { transform: scaleX(1); }
+
+/* Hover quote */
+.creator-quote {
+  position: absolute;
+  top: 40px; left: 40px;
+  right: 40px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s 0.2s;
+  z-index: 3;
+}
+.creator-card:hover .creator-quote { opacity: 1; transform: translateY(0); }
+
+/* ============ FORMATO ============ */
+#formato { background: var(--orange); color: var(--black); }
+#formato .section-label { color: var(--black); }
+#formato .section-label::before { background: var(--black); }
+#formato .section-title { color: var(--black); }
+.formato-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 2px solid rgba(0,0,0,0.15);
+  margin-top: 50px;
+}
+.formato-card {
+  padding: 48px 36px;
+  border-right: 1px solid rgba(0,0,0,0.15);
+  transition: background 0.3s;
+  position: relative;
+}
+.formato-card:last-child { border-right: none; }
+.formato-card:hover { background: rgba(0,0,0,0.06); }
+.formato-num {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: 4rem;
+  color: rgba(0,0,0,0.15);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+.formato-title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: var(--black);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.formato-desc { font-size: 0.9rem; color: rgba(0,0,0,0.65); line-height: 1.6; }
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 2px solid rgba(0,0,0,0.15);
+  margin-top: 0;
+}
+.stat-item {
+  padding: 40px 36px;
+  border-right: 1px solid rgba(0,0,0,0.15);
+  text-align: center;
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: 3.5rem;
+  color: var(--black);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.stat-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(0,0,0,0.5); margin-top: 8px; }
+
+/* ============ CONTACTO ============ */
+#contacto {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.contact-bg-text {
+  position: absolute;
+  bottom: -40px;
+  left: -20px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: 25vw;
+  color: rgba(255,255,255,0.02);
+  line-height: 1;
+  pointer-events: none;
+  select: none;
+  letter-spacing: -0.04em;
+}
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.contact-sub { font-size: 1.1rem; color: rgba(255,255,255,0.55); line-height: 1.6; margin-bottom: 40px; max-width: 400px; }
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: all 0.25s;
+}
+.contact-link-icon {
+  width: 44px; height: 44px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: all 0.25s;
+}
+.contact-link:hover .contact-link-icon { border-color: var(--orange); background: var(--orange); }
+.contact-link-text { color: rgba(255,255,255,0.55); font-size: 0.9rem; font-family: 'Space Grotesk', monospace; transition: color 0.25s; }
+.contact-link:hover .contact-link-text { color: white; }
+
+/* Form */
+.form-group { margin-bottom: 18px; }
+.form-label { display: block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 8px; }
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  color: white;
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.25s, background 0.25s;
+}
+.form-input::placeholder { color: rgba(255,255,255,0.2); }
+.form-input:focus { border-color: var(--orange); background: rgba(255,95,0,0.04); }
+textarea.form-input { resize: none; height: 110px; }
+.form-submit {
+  width: 100%;
+  background: var(--orange);
+  color: var(--black);
+  border: none;
+  padding: 16px;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.form-submit:hover { background: white; transform: translateY(-2px); }
+
+/* ============ FOOTER ============ */
+footer {
+  background: var(--black);
+  border-top: 1px solid rgba(255,95,0,0.25);
+  padding: 50px 40px 30px;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.footer-logo {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 900;
+  font-size: 2.5rem;
+  color: white;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+.footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
+.footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+.footer-links a:hover { color: var(--orange); }
+.footer-copy { font-size: 0.7rem; color: rgba(255,255,255,0.2); font-family: 'Space Grotesk', monospace; }
+
+/* ============ PULSE BAR ============ */
+.pulse-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 30px;
+}
+.pulse-bar span {
+  display: block;
+  width: 4px;
+  background: var(--orange);
+  border-radius: 2px;
+  animation: bar-bounce 0.8s ease-in-out infinite;
+}
+.pulse-bar span:nth-child(1) { height: 40%; animation-delay: 0s; }
+.pulse-bar span:nth-child(2) { height: 80%; animation-delay: 0.1s; }
+.pulse-bar span:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+.pulse-bar span:nth-child(4) { height: 100%; animation-delay: 0.15s; }
+.pulse-bar span:nth-child(5) { height: 50%; animation-delay: 0.05s; }
+.pulse-bar span:nth-child(6) { height: 90%; animation-delay: 0.25s; }
+@keyframes bar-bounce {
+  0%,100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.3); }
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .burger { display: flex; }
+
+  #hero { padding: 0 20px 100px; }
+  .hero-ritmo { font-size: clamp(80px, 20vw, 160px); }
+  .genre-row { display: none; }
+
+  .section-inner { padding: 70px 20px; }
+
+  .genre-grid { grid-template-columns: 1fr; }
+  .genre-card { border-right: none; }
+
+  .creators-grid { grid-template-columns: 1fr; }
+  .creator-card { aspect-ratio: 4/5; }
+
+  .formato-grid { grid-template-columns: 1fr; }
+  .formato-card { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.15); }
+
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(2) { border-right: none; }
+  .stat-item:nth-child(3) { border-top: 1px solid rgba(0,0,0,0.15); }
+  .stat-item:nth-child(4) { border-top: 1px solid rgba(0,0,0,0.15); }
+
+  .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============ TICKER at hero bottom ============ */
+.hero-ticker {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  z-index: 10;
+}
+.hero-ticker-fill {
+  height: 100%;
+  background: var(--orange);
+  animation: ticker 8s ease-in-out infinite;
+}
+@keyframes ticker {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
 </style>
 </head>
-<body class="blueprint-grid">
+<body>
 
-<!-- =================== FIXED NAV =================== -->
-<nav class="fixed top-0 left-0 right-0 z-[100] bg-ritmo-orange border-b-2 border-black/10 backdrop-blur-sm">
-  <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-    <a href="#hero" class="text-3xl font-black tracking-tighter leading-none" style="font-family:'Manrope',sans-serif;">RITMO</a>
-
-    <!-- Desktop nav -->
-    <div class="hidden md:flex items-center gap-8">
-      <a class="nav-link" href="#concepto">Concepto</a>
-      <a class="nav-link" href="#musica">Música</a>
-      <a class="nav-link" href="#creadores">Creadores</a>
-      <a class="nav-link" href="#formato">Formato</a>
-      <a class="nav-link" href="#contacto">Contacto</a>
-      <a class="btn-black text-sm" href="#contacto">Colabora con nosotros</a>
-    </div>
-
-    <!-- Mobile hamburger -->
-    <button id="burger-btn" class="md:hidden flex flex-col gap-1.5 cursor-pointer p-2">
-      <span class="w-6 h-0.5 bg-black block"></span>
-      <span class="w-6 h-0.5 bg-black block"></span>
-      <span class="w-6 h-0.5 bg-black block"></span>
-    </button>
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">RITMO</a>
+  <div class="nav-links">
+    <a href="#musica">Música</a>
+    <a href="#creadores">Creadores</a>
+    <a href="#formato">Formato</a>
+    <a href="#contacto" class="nav-cta btn">Colabora</a>
   </div>
-
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="flex-col gap-0 bg-ritmo-black text-ritmo-orange px-5 py-6 border-t-2 border-black/20">
-    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#concepto" onclick="closeMobileMenu()">Concepto</a>
-    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#musica" onclick="closeMobileMenu()">Música</a>
-    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#creadores" onclick="closeMobileMenu()">Creadores</a>
-    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#formato" onclick="closeMobileMenu()">Formato</a>
-    <a class="block py-3 text-xl font-black uppercase tracking-widest" href="#contacto" onclick="closeMobileMenu()">Contacto</a>
-    <a class="btn-black mt-5 text-center w-full block" href="#contacto" onclick="closeMobileMenu()">Colabora</a>
+  <div class="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
   </div>
 </nav>
 
-<!-- =================== HERO =================== -->
-<section id="hero" class="relative min-h-screen flex flex-col justify-end pt-24 pb-12 px-5 md:px-12 overflow-hidden">
+<!-- MOBILE NAV -->
+<div id="mobile-nav">
+  <button id="mobile-nav-close" onclick="toggleMenu()">✕</button>
+  <a href="#musica" onclick="toggleMenu()">Música</a>
+  <a href="#creadores" onclick="toggleMenu()">Creadores</a>
+  <a href="#formato" onclick="toggleMenu()">Formato</a>
+  <a href="#contacto" onclick="toggleMenu()" style="color:var(--orange)">Colabora →</a>
+</div>
 
-  <!-- Background stencil text -->
-  <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-    <span class="stencil-text font-black leading-none text-[28vw] md:text-[22vw] opacity-15 tracking-tighter" style="font-family:'Manrope',sans-serif;">RITMO</span>
-  </div>
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-ticker"><div class="hero-ticker-fill"></div></div>
+  <div class="hero-bg"></div>
 
-  <!-- Diagonal decorative lines -->
-  <div class="absolute top-0 right-0 w-1/2 h-full diagonal-stripes opacity-30 pointer-events-none"></div>
+  <!-- Giant RITMO -->
+  <div class="hero-ritmo glitch" data-text="RITMO">RITMO</div>
+  <div class="hero-bar"></div>
 
-  <!-- Spinning badge -->
-  <div class="absolute top-28 right-5 md:top-32 md:right-16 w-28 h-28 md:w-36 md:h-36">
-    <div class="relative w-full h-full">
-      <svg class="spinning w-full h-full" viewBox="0 0 100 100">
-        <path id="circle-text" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
-        <text font-family="Inter, sans-serif" font-weight="900" font-size="11" fill="#0A0A0A" letter-spacing="3">
-          <textPath href="#circle-text">EL GOLPE AL CAMBIO · RITMO · EL GOLPE AL CAMBIO ·</textPath>
-        </text>
-      </svg>
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div class="w-10 h-10 bg-ritmo-black rounded-full flex items-center justify-center">
-          <div class="w-3 h-3 bg-ritmo-orange rounded-full pulse-dot"></div>
-        </div>
+  <!-- Content bottom-left -->
+  <div class="hero-content">
+    <div class="hero-tag">
+      <div class="pulse-bar">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
+      Festival de Música Urbana · Est. 2024
     </div>
-  </div>
-
-  <!-- Main hero content -->
-  <div class="relative z-10 max-w-7xl mx-auto w-full">
-
-    <div class="mb-6">
-      <span class="text-xs font-mono tracking-[0.3em] uppercase opacity-60 bg-black/10 px-3 py-1 inline-block">EST. 2024 // FESTIVAL DE MÚSICA URBANA</span>
-    </div>
-
-    <h1 class="font-black uppercase leading-[0.82] tracking-tighter text-[16vw] md:text-[11vw] mb-8" style="font-family:'Manrope',sans-serif;">
-      EL<br/>GOLPE<br/>AL<br/>CAMBIO
+    <h1 class="hero-title">
+      El Golpe<br/>Al <em>Cambio</em>
     </h1>
-
-    <div class="flex flex-col md:flex-row md:items-end gap-6 md:gap-16">
-      <div class="max-w-md">
-        <p class="text-lg md:text-xl font-bold leading-snug">
-          No importa el género. No importa el año.<br/>No importa la temporada.<br/><strong>Lo único que importa es el ritmo.</strong>
-        </p>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <a class="btn-black" href="#concepto">Descubre RITMO</a>
-        <a class="btn-black" href="#contacto" style="background:transparent; color:#0A0A0A;">Colabora con nosotros →</a>
-      </div>
+    <p class="hero-desc">No importa el género. No importa el año. Solo importa que la pista no pare.</p>
+    <div class="hero-btns">
+      <a href="#contacto" class="btn btn-fill">Quiero ser venue →</a>
+      <a href="#creadores" class="btn btn-outline">Los creadores</a>
     </div>
+  </div>
 
-    <!-- Genre pills -->
-    <div class="flex flex-wrap gap-2 mt-10">
-      <span class="genre-tag">Reggaeton</span>
-      <span class="genre-tag">Tech House</span>
-      <span class="genre-tag">Techno</span>
-      <span class="genre-tag">Urban</span>
-      <span class="genre-tag">+ Lo que mueva</span>
-    </div>
+  <!-- Genre tags top-right -->
+  <div class="genre-row">
+    <div class="genre-pill active">Reggaeton</div>
+    <div class="genre-pill">Tech House</div>
+    <div class="genre-pill">Techno</div>
+    <div class="genre-pill">+ Lo que mueva</div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
   </div>
 </section>
 
-<!-- =================== MARQUEE =================== -->
-<div class="overflow-hidden bg-ritmo-black py-4 border-y-2 border-black/40">
-  <div class="marquee-inner">
-    <span class="text-ritmo-orange font-black text-3xl md:text-5xl uppercase tracking-tight whitespace-nowrap px-8" style="font-family:'Manrope',sans-serif;">
-      RITMO &nbsp;·&nbsp; EL GOLPE AL CAMBIO &nbsp;·&nbsp; REGGAETON &nbsp;·&nbsp; TECH HOUSE &nbsp;·&nbsp; TECHNO &nbsp;·&nbsp; URBAN &nbsp;·&nbsp;
-    </span>
-    <span class="text-ritmo-orange font-black text-3xl md:text-5xl uppercase tracking-tight whitespace-nowrap px-8" style="font-family:'Manrope',sans-serif;">
-      RITMO &nbsp;·&nbsp; EL GOLPE AL CAMBIO &nbsp;·&nbsp; REGGAETON &nbsp;·&nbsp; TECH HOUSE &nbsp;·&nbsp; TECHNO &nbsp;·&nbsp; URBAN &nbsp;·&nbsp;
-    </span>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">RITMO <span class="marquee-dot"></span></div>
+    <div class="marquee-item">EL GOLPE AL CAMBIO <span class="marquee-dot"></span></div>
+    <div class="marquee-item">REGGAETON <span class="marquee-dot"></span></div>
+    <div class="marquee-item">TECH HOUSE <span class="marquee-dot"></span></div>
+    <div class="marquee-item">TECHNO <span class="marquee-dot"></span></div>
+    <div class="marquee-item">URBAN <span class="marquee-dot"></span></div>
+    <div class="marquee-item">RITMO <span class="marquee-dot"></span></div>
+    <div class="marquee-item">EL GOLPE AL CAMBIO <span class="marquee-dot"></span></div>
+    <div class="marquee-item">REGGAETON <span class="marquee-dot"></span></div>
+    <div class="marquee-item">TECH HOUSE <span class="marquee-dot"></span></div>
+    <div class="marquee-item">TECHNO <span class="marquee-dot"></span></div>
+    <div class="marquee-item">URBAN <span class="marquee-dot"></span></div>
   </div>
 </div>
 
-<!-- =================== CONCEPTO =================== -->
-<section id="concepto" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="max-w-7xl mx-auto">
+<!-- ===== GÉNEROS ===== -->
+<section id="musica">
+  <div class="section-inner">
+    <div class="section-label reveal">02 · La Música</div>
+    <h2 class="section-title reveal delay-1">Un festival,<br/><span class="orange">todos los ritmos</span></h2>
 
-    <!-- Label -->
-    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 mb-6">01 // CONCEPTO</p>
-
-    <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-start">
-      <div>
-        <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-8" style="font-family:'Manrope',sans-serif;">
-          QUÉ ES<br/>RITMO
-        </h2>
-        <div class="bg-ritmo-black text-ritmo-orange p-8 md:p-10 border-l-8 border-ritmo-orange -rotate-1 tilt-card">
-          <p class="text-xl md:text-2xl font-bold leading-snug">
-            "RITMO no es un festival más. Es una declaración. Un golpe directo al status quo de lo que ya existe en la escena musical."
-          </p>
-        </div>
+    <div class="genre-grid">
+      <div class="genre-card reveal delay-1">
+        <span class="genre-icon">🔥</span>
+        <div class="genre-name">Reggaeton</div>
+        <p class="genre-desc">El perreo sin filtros. El género que conquistó el mundo entero sin pedir permiso.</p>
+        <div class="genre-sub">Urban · Latin · Flow</div>
       </div>
-
-      <div class="flex flex-col gap-6 mt-4 md:mt-16">
-        <div class="border-2 border-black/20 p-6 bg-white/30 backdrop-blur-sm">
-          <div class="flex items-start gap-4">
-            <span class="text-4xl font-black opacity-20 leading-none">01</span>
-            <div>
-              <h3 class="font-black text-lg uppercase tracking-tight mb-2">El Ritmo por encima de todo</h3>
-              <p class="text-sm leading-relaxed opacity-80">En RITMO, el género es irrelevante. Reggaeton, tech house, techno, o lo que sea — si mueve el cuerpo, pertenece aquí. El único criterio es que la gente no pare de bailar.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-2 border-black/20 p-6 bg-white/30 backdrop-blur-sm rotate-1 tilt-card">
-          <div class="flex items-start gap-4">
-            <span class="text-4xl font-black opacity-20 leading-none">02</span>
-            <div>
-              <h3 class="font-black text-lg uppercase tracking-tight mb-2">La energía ante todo</h3>
-              <p class="text-sm leading-relaxed opacity-80">El objetivo principal del festival es que la gente esté animada, con energía, disfrutando. No hay reglas de protocolo. Hay libertad total dentro del ritmo.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-2 border-black/20 p-6 bg-white/30 backdrop-blur-sm -rotate-1 tilt-card">
-          <div class="flex items-start gap-4">
-            <span class="text-4xl font-black opacity-20 leading-none">03</span>
-            <div>
-              <h3 class="font-black text-lg uppercase tracking-tight mb-2">Diferente a todo lo que existe</h3>
-              <p class="text-sm leading-relaxed opacity-80">Mientras otros festivales se encasillan en un género o un estilo, RITMO rompe esas fronteras. Aquí conviven mundos sonoros que nunca habían compartido escenario.</p>
-            </div>
-          </div>
-        </div>
+      <div class="genre-card reveal delay-2">
+        <span class="genre-icon">⚡</span>
+        <div class="genre-name">Tech House</div>
+        <p class="genre-desc">Basslines que atrapan y no sueltan. Groove constante de principio a fin.</p>
+        <div class="genre-sub">Groove · Bass · Energy</div>
+      </div>
+      <div class="genre-card reveal delay-3">
+        <span class="genre-icon">🖤</span>
+        <div class="genre-name">Techno</div>
+        <p class="genre-desc">El trance de los kick drums. La experiencia sonora más cruda e hipnótica.</p>
+        <div class="genre-sub">Industrial · Dark · Raw</div>
       </div>
     </div>
 
-  </div>
-</section>
-
-<!-- =================== MÚSICA =================== -->
-<section id="musica" class="relative bg-ritmo-black text-ritmo-white py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
-
-  <div class="max-w-7xl mx-auto relative z-10">
-
-    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-40 mb-6 text-ritmo-orange">02 // LA MÚSICA</p>
-
-    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-4 text-ritmo-white" style="font-family:'Manrope',sans-serif;">
-      UN FESTIVAL,<br/>TODOS LOS RITMOS
-    </h2>
-
-    <p class="text-ritmo-orange text-lg md:text-xl font-bold mb-16 max-w-xl">
-      Porque el ritmo no tiene fronteras. Cada sesión es una experiencia única, sin ataduras de género ni de estilo.
-    </p>
-
-    <!-- Genre cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t-2 border-white/10">
-
-      <div class="p-8 md:p-10 border-b-2 md:border-b-0 md:border-r-2 border-white/10 group hover:bg-ritmo-orange transition-colors duration-300">
-        <div class="text-[60px] mb-4 group-hover:scale-110 transition-transform duration-300">🔥</div>
-        <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter mb-3 group-hover:text-ritmo-black transition-colors" style="font-family:'Manrope',sans-serif;">Reggaeton</h3>
-        <p class="text-sm opacity-60 group-hover:opacity-100 group-hover:text-ritmo-black leading-relaxed transition-colors">El perreo, el flow, la calle. El género que conquistó el mundo entero sin pedir permiso. La base de lo urbano.</p>
-        <div class="mt-6 text-xs font-mono opacity-40 group-hover:opacity-70 group-hover:text-ritmo-black transition-colors uppercase tracking-widest">URBAN · LATIN · FLOW</div>
-      </div>
-
-      <div class="p-8 md:p-10 border-b-2 md:border-b-0 md:border-r-2 border-white/10 group hover:bg-ritmo-orange transition-colors duration-300">
-        <div class="text-[60px] mb-4 group-hover:scale-110 transition-transform duration-300">⚡</div>
-        <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter mb-3 group-hover:text-ritmo-black transition-colors" style="font-family:'Manrope',sans-serif;">Tech House</h3>
-        <p class="text-sm opacity-60 group-hover:opacity-100 group-hover:text-ritmo-black leading-relaxed transition-colors">El groove que te atrapa y no te suelta. Basslines profundas, hi-hats afilados, energía constante de principio a fin.</p>
-        <div class="mt-6 text-xs font-mono opacity-40 group-hover:opacity-70 group-hover:text-ritmo-black transition-colors uppercase tracking-widest">GROOVE · BASS · ENERGY</div>
-      </div>
-
-      <div class="p-8 md:p-10 group hover:bg-ritmo-orange transition-colors duration-300">
-        <div class="text-[60px] mb-4 group-hover:scale-110 transition-transform duration-300">🖤</div>
-        <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter mb-3 group-hover:text-ritmo-black transition-colors" style="font-family:'Manrope',sans-serif;">Techno</h3>
-        <p class="text-sm opacity-60 group-hover:opacity-100 group-hover:text-ritmo-black leading-relaxed transition-colors">El trance de los kick drums. La experiencia sonora más cruda e hipnótica. El techno que te lleva a otro estado mental.</p>
-        <div class="mt-6 text-xs font-mono opacity-40 group-hover:opacity-70 group-hover:text-ritmo-black transition-colors uppercase tracking-widest">INDUSTRIAL · DARK · TRANCE</div>
-      </div>
-    </div>
-
-    <!-- Big statement -->
-    <div class="mt-16 border-2 border-ritmo-orange p-8 md:p-12 relative overflow-hidden">
-      <div class="absolute inset-0 diagonal-stripes opacity-10 pointer-events-none"></div>
-      <p class="text-ritmo-orange font-black text-2xl md:text-4xl leading-tight tracking-tighter relative z-10" style="font-family:'Manrope',sans-serif;">
-        "Si tiene ritmo, tiene cabida en RITMO."
+    <!-- Statement -->
+    <div class="reveal delay-2" style="margin-top: 3px; border-left: 4px solid var(--orange); padding: 36px 40px; background: rgba(255,95,0,0.04);">
+      <p style="font-family:'Manrope',sans-serif; font-weight:900; font-size:clamp(1.2rem,2.5vw,2rem); color:white; line-height:1.2; letter-spacing:-0.01em;">
+        "Si tiene ritmo, pertenece aquí."
       </p>
-      <p class="text-white/50 text-sm mt-4 font-mono uppercase tracking-widest">— FILOSOFÍA DEL FESTIVAL</p>
+      <p style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-top:12px;">Filosofía del festival</p>
     </div>
-
   </div>
 </section>
 
-<!-- =================== CREADORES =================== -->
-<section id="creadores" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="max-w-7xl mx-auto">
-
-    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 mb-6">03 // LOS CREADORES</p>
-
-    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-16" style="font-family:'Manrope',sans-serif;">
-      QUIÉNES<br/>SOMOS
-    </h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-
-      <!-- Aleix -->
-      <div class="group">
-        <div class="relative overflow-hidden border-4 border-black aspect-[3/4] bg-black">
-          <img
-            src="images/aleix.jpeg"
-            alt="Aleix Carles – DJ & Co-Fundador de RITMO"
-            class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
-            style="object-position: center 20%;"
-          />
-          <div class="photo-overlay absolute inset-0"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-            <p class="font-mono text-xs tracking-widest uppercase opacity-60 mb-1">Co-Fundador · DJ Principal</p>
-            <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-tight" style="font-family:'Manrope',sans-serif;">Aleix<br/>Carles</h3>
-          </div>
-          <div class="absolute top-4 right-4 bg-ritmo-orange text-black font-black text-xs px-3 py-1 rotate-3">FOUNDER</div>
-        </div>
-        <div class="mt-4 p-5 bg-black/5 border-l-4 border-ritmo-orange">
-          <p class="text-sm leading-relaxed opacity-80">Co-fundador y DJ principal de RITMO. Su selección musical cruza fronteras entre el reggaeton más crudo y las sesiones de tech house más elegantes. La mente detrás del concepto.</p>
-        </div>
-      </div>
-
-      <!-- Pol -->
-      <div class="group md:mt-12">
-        <div class="relative overflow-hidden border-4 border-black aspect-[3/4] bg-black">
-          <img
-            src="images/pol.jpeg"
-            alt="Pol Vidal – DJ & Co-Fundador de RITMO"
-            class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
-            style="object-position: center 20%;"
-          />
-          <div class="photo-overlay absolute inset-0"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-            <p class="font-mono text-xs tracking-widest uppercase opacity-60 mb-1">Co-Fundador · DJ Principal</p>
-            <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-tight" style="font-family:'Manrope',sans-serif;">Pol<br/>Vidal</h3>
-          </div>
-          <div class="absolute top-4 right-4 bg-ritmo-orange text-black font-black text-xs px-3 py-1 -rotate-2">FOUNDER</div>
-        </div>
-        <div class="mt-4 p-5 bg-black/5 border-l-4 border-ritmo-orange">
-          <p class="text-sm leading-relaxed opacity-80">Co-fundador y DJ principal de RITMO. Especialista en techno y tech house, Pol construye atmósferas que hipnotizan al público desde el primer beat hasta el último.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Together statement -->
-    <div class="mt-16 text-center">
-      <div class="inline-block border-4 border-black p-8 md:p-12 -rotate-1 bg-white/40 tilt-card">
-        <p class="font-black text-xl md:text-2xl uppercase tracking-tight" style="font-family:'Manrope',sans-serif;">Juntos, han creado algo que la escena nunca ha visto.</p>
-        <p class="text-sm font-mono opacity-50 mt-2 uppercase tracking-widest">Aleix Carles + Pol Vidal = RITMO</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- =================== FORMATO =================== -->
-<section id="formato" class="relative bg-ritmo-black text-ritmo-white py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
-
-  <!-- Big stencil background -->
-  <div class="absolute right-0 bottom-0 select-none pointer-events-none overflow-hidden">
-    <span class="font-black text-[20vw] opacity-5 leading-none stencil-text-white" style="font-family:'Manrope',sans-serif;">FMT</span>
-  </div>
-
-  <div class="max-w-7xl mx-auto relative z-10">
-
-    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-40 mb-6 text-ritmo-orange">04 // EL FORMATO</p>
-
-    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-4" style="font-family:'Manrope',sans-serif;">
-      SIEMPRE<br/>EN MOVIMIENTO
-    </h2>
-
-    <p class="text-ritmo-orange text-lg md:text-xl font-bold mb-16 max-w-2xl">
-      RITMO no tiene un lugar fijo. El festival viaja, se adapta, conquista nuevos espacios. Cada edición es una experiencia única en un lugar único.
+<!-- ===== CREADORES ===== -->
+<section id="creadores">
+  <div class="section-inner" style="padding-bottom: 0;">
+    <div class="section-label reveal">03 · Los Creadores</div>
+    <h2 class="section-title reveal delay-1">Aleix <span class="orange">&</span> Pol</h2>
+    <p class="reveal delay-2" style="color:rgba(255,255,255,0.55); font-size:1.05rem; max-width:500px; line-height:1.6; margin-bottom:50px;">
+      Dos DJs, una visión. Los fundadores de RITMO llevan el festival en las manos y el ritmo en las venas.
     </p>
+  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <!-- Full-width photos -->
+  <div class="creators-grid">
 
-      <div class="border-2 border-white/10 p-7 hover:border-ritmo-orange transition-colors duration-300">
-        <div class="text-ritmo-orange text-5xl mb-5 font-black" style="font-family:'Manrope',sans-serif;">01</div>
-        <h3 class="font-black text-xl uppercase tracking-tight mb-3">Venues Rotativos</h3>
-        <p class="text-sm text-white/60 leading-relaxed">El festival se desplaza por diferentes espacios en cada edición. Clubs, naves industriales, espacios al aire libre, almacenes — cualquier lugar que tenga potencial.</p>
-      </div>
-
-      <div class="border-2 border-white/10 p-7 hover:border-ritmo-orange transition-colors duration-300">
-        <div class="text-ritmo-orange text-5xl mb-5 font-black" style="font-family:'Manrope',sans-serif;">02</div>
-        <h3 class="font-black text-xl uppercase tracking-tight mb-3">Experiencia Exclusiva</h3>
-        <p class="text-sm text-white/60 leading-relaxed">Cada edición es irrepetible. El lugar cambia, el ambiente cambia, pero la esencia permanece: ritmo y energía sin límites.</p>
-      </div>
-
-      <div class="border-2 border-white/10 p-7 hover:border-ritmo-orange transition-colors duration-300">
-        <div class="text-ritmo-orange text-5xl mb-5 font-black" style="font-family:'Manrope',sans-serif;">03</div>
-        <h3 class="font-black text-xl uppercase tracking-tight mb-3">Producción Completa</h3>
-        <p class="text-sm text-white/60 leading-relaxed">Nos encargamos de toda la producción, el sonido, las luces y la comunicación. El venue solo necesita abrir sus puertas.</p>
-      </div>
-
-    </div>
-
-    <!-- Rotating venue visual -->
-    <div class="mt-16 flex flex-col md:flex-row items-center gap-8 border-t-2 border-white/10 pt-12">
-      <div class="text-center md:text-left">
-        <div class="inline-flex flex-wrap gap-2 justify-center md:justify-start">
-          <span class="border-2 border-ritmo-orange text-ritmo-orange px-4 py-2 text-xs font-mono uppercase tracking-widest">Club nocturno</span>
-          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Nave industrial</span>
-          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Espacio abierto</span>
-          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Rooftop</span>
-          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Almacén</span>
-          <span class="border-2 border-ritmo-orange/40 text-ritmo-orange/60 px-4 py-2 text-xs font-mono uppercase tracking-widest">¿Tu local?</span>
-        </div>
-        <p class="text-white/40 text-xs font-mono mt-4 uppercase tracking-widest">Cada edición. Un lugar diferente.</p>
+    <!-- Aleix -->
+    <div class="creator-card" id="card-aleix">
+      <div class="creator-curtain" id="curtain-aleix"></div>
+      <img class="creator-img" src="images/aleix.jpeg" alt="Aleix Carles"/>
+      <div class="creator-quote">"El reggaeton y el tech house no son géneros opuestos. Son el mismo pulso con diferente disfraz."</div>
+      <div class="creator-overlay">
+        <div class="creator-role">Co-Fundador · DJ Principal</div>
+        <div class="creator-name">Aleix<br/>Carles</div>
+        <div class="creator-tag">Reggaeton · Tech House</div>
       </div>
     </div>
 
+    <!-- Pol -->
+    <div class="creator-card" id="card-pol">
+      <div class="creator-curtain" id="curtain-pol"></div>
+      <img class="creator-img" src="images/pol.jpeg" alt="Pol Vidal"/>
+      <div class="creator-quote">"El techno no es oscuro. Es honesto. Y eso es lo que buscamos en RITMO."</div>
+      <div class="creator-overlay">
+        <div class="creator-role">Co-Fundador · DJ Principal</div>
+        <div class="creator-name">Pol<br/>Vidal</div>
+        <div class="creator-tag">Techno · Tech House</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Together bar -->
+  <div style="background: var(--orange); padding: 28px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+    <p style="font-family:'Manrope',sans-serif; font-weight:900; font-size:clamp(1rem,2vw,1.5rem); color:var(--black); text-transform:uppercase; letter-spacing:-0.01em;">
+      Aleix Carles + Pol Vidal = RITMO
+    </p>
+    <a href="#contacto" class="btn" style="background:var(--black); color:white; border:2px solid var(--black);">Trabaja con nosotros →</a>
   </div>
 </section>
 
-<!-- =================== POR QUÉ COLABORAR =================== -->
-<section class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="max-w-7xl mx-auto">
+<!-- ===== FORMATO ===== -->
+<section id="formato">
+  <div class="section-inner">
+    <div class="section-label reveal">04 · El Formato</div>
+    <h2 class="section-title reveal delay-1">Siempre<br/>en movimiento</h2>
+    <p class="reveal delay-2" style="font-size:1.05rem; color:rgba(0,0,0,0.6); max-width:500px; line-height:1.6; margin-bottom:0;">
+      RITMO no tiene un lugar fijo. El festival viaja y conquista nuevos espacios. Cada edición es irrepetible.
+    </p>
+  </div>
 
-    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 mb-6">05 // POR QUÉ COLABORAR</p>
-
-    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-16" style="font-family:'Manrope',sans-serif;">
-      QUÉ GANÁIS<br/>CON RITMO
-    </h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-      <div class="bg-ritmo-black text-ritmo-white p-8 md:p-10 border-b-4 border-ritmo-orange tilt-card rotate-1">
-        <h3 class="font-black text-2xl uppercase tracking-tight mb-4 text-ritmo-orange" style="font-family:'Manrope',sans-serif;">Aforo garantizado</h3>
-        <p class="text-white/70 leading-relaxed">RITMO genera una comunidad de seguidores fieles que siguen el festival allá donde vaya. Cada edición lleva un público joven, activo y con ganas de consumir.</p>
-      </div>
-
-      <div class="bg-white/40 border-2 border-black/20 p-8 md:p-10 tilt-card -rotate-1">
-        <h3 class="font-black text-2xl uppercase tracking-tight mb-4" style="font-family:'Manrope',sans-serif;">Visibilidad de marca</h3>
-        <p class="leading-relaxed opacity-70">Tu espacio aparece en toda la comunicación del festival: redes sociales, flyers, prensa. Asociar tu venue con RITMO te posiciona como referente de la escena.</p>
-      </div>
-
-      <div class="bg-white/40 border-2 border-black/20 p-8 md:p-10 tilt-card rotate-1">
-        <h3 class="font-black text-2xl uppercase tracking-tight mb-4" style="font-family:'Manrope',sans-serif;">Cero quebraderos de cabeza</h3>
-        <p class="leading-relaxed opacity-70">Nosotros gestionamos la producción completa: sonido, iluminación, artistas, comunicación y taquilla. Vosotros ponéis el espacio, nosotros el resto.</p>
-      </div>
-
-      <div class="bg-ritmo-black text-ritmo-white p-8 md:p-10 border-b-4 border-ritmo-orange tilt-card -rotate-1">
-        <h3 class="font-black text-2xl uppercase tracking-tight mb-4 text-ritmo-orange" style="font-family:'Manrope',sans-serif;">Algo diferente</h3>
-        <p class="text-white/70 leading-relaxed">No traemos lo de siempre. Traemos un festival que rompe moldes, mezcla géneros y crea experiencias que la gente recuerda. Eso es lo que representa tu venue cuando acoge RITMO.</p>
-      </div>
-
+  <div class="formato-grid">
+    <div class="formato-card reveal delay-1">
+      <div class="formato-num">01</div>
+      <div class="formato-title">Venues Rotativos</div>
+      <p class="formato-desc">Clubs, naves industriales, rooftops, espacios al aire libre. El festival se adapta al espacio, no al revés.</p>
     </div>
-
-    <!-- Numbers -->
-    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-0 border-4 border-black overflow-hidden">
-      <div class="p-6 md:p-8 border-r-2 border-black text-center">
-        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">100%</div>
-        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Producción a cargo de RITMO</div>
-      </div>
-      <div class="p-6 md:p-8 border-r-2 border-black text-center">
-        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">0€</div>
-        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Coste de producción para el venue</div>
-      </div>
-      <div class="p-6 md:p-8 border-r-2 border-black text-center">
-        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">3+</div>
-        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Géneros musicales por edición</div>
-      </div>
-      <div class="p-6 md:p-8 text-center">
-        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">∞</div>
-        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Energía en pista</div>
-      </div>
+    <div class="formato-card reveal delay-2">
+      <div class="formato-num">02</div>
+      <div class="formato-title">Ediciones Únicas</div>
+      <p class="formato-desc">Cada edición es diferente, irrepetible. El público lo sabe y eso crea una urgencia real de estar ahí.</p>
     </div>
+    <div class="formato-card reveal delay-3">
+      <div class="formato-num">03</div>
+      <div class="formato-title">Producción Completa</div>
+      <p class="formato-desc">Sonido, luces, artistas, comunicación y taquilla. Nosotros lo gestionamos todo. Vosotros ponéis el espacio.</p>
+    </div>
+  </div>
 
+  <div class="stats-row reveal">
+    <div class="stat-item">
+      <div class="stat-num" data-count="100">0</div>
+      <div class="stat-label">% producción a cargo de RITMO</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="font-size:3rem;">0€</div>
+      <div class="stat-label">Coste de producción para el venue</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-count="3">0</div>
+      <div class="stat-label">Géneros mínimos por edición</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Energía en pista garantizada</div>
+    </div>
   </div>
 </section>
 
-<!-- =================== CONTACTO =================== -->
-<section id="contacto" class="relative bg-ritmo-black text-ritmo-white py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
+<!-- ===== CONTACTO ===== -->
+<section id="contacto">
+  <div class="contact-bg-text">RITMO</div>
+  <div class="section-inner">
+    <div class="section-label reveal">05 · Contacto</div>
+    <h2 class="section-title reveal delay-1">¿Tienes<br/><span class="orange">el espacio?</span></h2>
 
-  <!-- Big stencil RITMO -->
-  <div class="absolute -bottom-10 -right-10 select-none pointer-events-none overflow-hidden">
-    <span class="font-black leading-none opacity-[0.04]" style="font-family:'Manrope',sans-serif; font-size: 25vw; color: white;">R</span>
-  </div>
-
-  <div class="max-w-7xl mx-auto relative z-10">
-
-    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-40 mb-6 text-ritmo-orange">06 // CONTACTO</p>
-
-    <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-start">
-      <div>
-        <h2 class="font-black uppercase text-[14vw] md:text-[7vw] leading-[0.85] tracking-tighter mb-8" style="font-family:'Manrope',sans-serif;">
-          HABLEMOS
-        </h2>
-        <p class="text-white/60 text-lg leading-relaxed mb-8">
-          ¿Tienes un espacio que podría acoger RITMO? ¿Quieres colaborar con el festival? Cuéntanos todo. Estamos construyendo algo grande y queremos hacerlo con los mejores venues.
+    <div class="contact-grid">
+      <div class="reveal-left delay-1">
+        <p class="contact-sub">
+          Nosotros ponemos el festival. Tú pones el lugar. Si tienes un espacio que podría acoger RITMO, hablemos.
         </p>
+        <a href="mailto:contacto@ritmo-festival.com" class="contact-link">
+          <div class="contact-link-icon">@</div>
+          <div class="contact-link-text">contacto@ritmo-festival.com</div>
+        </a>
+        <a href="https://instagram.com/ritmofestival" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon" style="font-size:0.75rem; font-weight:900;">IG</div>
+          <div class="contact-link-text">@ritmofestival</div>
+        </a>
 
-        <div class="flex flex-col gap-4">
-          <a href="mailto:contacto@ritmo-festival.com" class="flex items-center gap-4 group">
-            <div class="w-10 h-10 border-2 border-ritmo-orange flex items-center justify-center shrink-0 group-hover:bg-ritmo-orange transition-colors">
-              <span class="text-ritmo-orange group-hover:text-black text-lg">@</span>
-            </div>
-            <span class="text-white/80 group-hover:text-ritmo-orange transition-colors font-mono text-sm tracking-wide">contacto@ritmo-festival.com</span>
-          </a>
-          <a href="https://instagram.com/ritmofestival" target="_blank" rel="noopener" class="flex items-center gap-4 group">
-            <div class="w-10 h-10 border-2 border-white/20 flex items-center justify-center shrink-0 group-hover:border-ritmo-orange transition-colors">
-              <span class="text-white/60 group-hover:text-ritmo-orange text-sm font-bold transition-colors">IG</span>
-            </div>
-            <span class="text-white/50 group-hover:text-ritmo-orange transition-colors font-mono text-sm tracking-wide">@ritmofestival</span>
-          </a>
+        <!-- Mini pulse visualizer -->
+        <div style="margin-top:50px; display:flex; align-items:flex-end; gap:4px; height:50px;">
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0s; height:30%;"></div>
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0.1s; height:80%;"></div>
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0.2s; height:50%;"></div>
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0.05s; height:100%;"></div>
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0.25s; height:60%;"></div>
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0.15s; height:90%;"></div>
+          <div style="width:6px; background:var(--orange); border-radius:3px; animation: bar-bounce 0.7s ease-in-out infinite; animation-delay:0.3s; height:40%;"></div>
+          <div style="width:6px; background:rgba(255,95,0,0.3); border-radius:3px; height:70%;"></div>
+          <div style="width:6px; background:rgba(255,95,0,0.2); border-radius:3px; height:50%;"></div>
+          <div style="width:6px; background:rgba(255,95,0,0.1); border-radius:3px; height:30%;"></div>
         </div>
+        <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); letter-spacing:0.15em; text-transform:uppercase; margin-top:10px;">Ritmo constante. Siempre.</p>
       </div>
 
-      <!-- Contact form -->
-      <div class="bg-white/5 border-2 border-white/10 p-8 md:p-10">
-        <h3 class="font-black uppercase text-xl tracking-tight mb-6 text-ritmo-orange">Propón tu espacio</h3>
-        <form class="flex flex-col gap-4" onsubmit="handleForm(event)">
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Nombre / Venue</label>
-            <input
-              type="text"
-              placeholder="Nombre del local o persona de contacto"
-              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors"
-            />
+      <div class="reveal-right delay-2">
+        <form onsubmit="handleForm(event)">
+          <div class="form-group">
+            <label class="form-label">Nombre / Venue</label>
+            <input type="text" class="form-input" placeholder="Tu nombre o el del local"/>
           </div>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Email</label>
-            <input
-              type="email"
-              placeholder="tu@email.com"
-              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors"
-            />
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="tu@email.com"/>
           </div>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Localización</label>
-            <input
-              type="text"
-              placeholder="Ciudad / Dirección aproximada"
-              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors"
-            />
+          <div class="form-group">
+            <label class="form-label">Ciudad</label>
+            <input type="text" class="form-input" placeholder="¿Dónde está el espacio?"/>
           </div>
-          <div>
-            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Cuéntanos más</label>
-            <textarea
-              rows="4"
-              placeholder="Aforo estimado, tipo de espacio, disponibilidad..."
-              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors resize-none"
-            ></textarea>
+          <div class="form-group">
+            <label class="form-label">Cuéntanos</label>
+            <textarea class="form-input" placeholder="Aforo aproximado, tipo de espacio, disponibilidad..."></textarea>
           </div>
-          <button type="submit" class="btn-orange text-center w-full font-black text-sm tracking-widest mt-2">
+          <button type="submit" class="form-submit" id="submit-btn">
             Enviar propuesta →
           </button>
         </form>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- =================== FOOTER =================== -->
-<footer class="bg-ritmo-black text-ritmo-white pt-16 pb-10 px-5 md:px-12 relative overflow-hidden border-t-4 border-ritmo-orange">
-  <div class="absolute -bottom-10 left-0 select-none pointer-events-none">
-    <span class="font-black leading-none opacity-[0.04]" style="font-family:'Manrope',sans-serif; font-size: 30vw; color: white;">RITMO</span>
-  </div>
-
-  <div class="max-w-7xl mx-auto relative z-10">
-    <div class="flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
-      <div>
-        <h2 class="font-black text-6xl md:text-8xl tracking-tighter leading-none mb-4" style="font-family:'Manrope',sans-serif;">RITMO</h2>
-        <p class="text-white/40 font-mono text-xs uppercase tracking-[0.3em]">El Golpe al Cambio · EST. 2024</p>
-      </div>
-      <div class="flex flex-col gap-2 text-right">
-        <a href="#concepto" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Concepto</a>
-        <a href="#musica" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Música</a>
-        <a href="#creadores" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Creadores</a>
-        <a href="#formato" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Formato</a>
-        <a href="#contacto" class="text-ritmo-orange hover:opacity-70 transition-opacity font-mono text-sm uppercase tracking-widest">Contacto</a>
-      </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#hero" class="footer-logo">RITMO</a>
+    <div class="footer-links">
+      <a href="#musica">Música</a>
+      <a href="#creadores">Creadores</a>
+      <a href="#formato">Formato</a>
+      <a href="#contacto">Contacto</a>
     </div>
-
-    <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-white/30 font-mono text-[10px] uppercase tracking-widest">© 2024 RITMO Festival · Aleix Carles & Pol Vidal</p>
-      <div class="flex gap-6">
-        <a href="https://instagram.com/ritmofestival" target="_blank" rel="noopener" class="text-white/40 hover:text-ritmo-orange transition-colors font-mono text-xs uppercase tracking-widest">Instagram</a>
-        <a href="mailto:contacto@ritmo-festival.com" class="text-white/40 hover:text-ritmo-orange transition-colors font-mono text-xs uppercase tracking-widest">Email</a>
-      </div>
-    </div>
+    <p class="footer-copy">© 2024 RITMO · Aleix Carles & Pol Vidal</p>
   </div>
 </footer>
 
 <script>
-  // Mobile menu
-  const burgerBtn = document.getElementById('burger-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
+/* NAV scroll */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
 
-  burgerBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('open');
-  });
+/* Mobile menu */
+function toggleMenu() {
+  document.getElementById('mobile-nav').classList.toggle('open');
+}
 
-  function closeMobileMenu() {
-    mobileMenu.classList.remove('open');
-  }
-
-  // Smooth scroll offset for fixed nav
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      if (href === '#') return;
-      const target = document.querySelector(href);
-      if (target) {
-        e.preventDefault();
-        const navHeight = document.querySelector('nav').offsetHeight;
-        const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
-    });
-  });
-
-  // Form handler
-  function handleForm(e) {
+/* Smooth anchor offset */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id === '#') return;
+    const el = document.querySelector(id);
+    if (!el) return;
     e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = '✓ Mensaje enviado — Te contactamos pronto';
-    btn.style.background = '#1a1a1a';
-    btn.style.cursor = 'default';
-    btn.disabled = true;
-  }
+    const offset = nav.offsetHeight;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+    document.getElementById('mobile-nav').classList.remove('open');
+  });
+});
 
-  // Intersection observer for subtle entrance animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = entry.target.dataset.transform || 'none';
-      }
-    });
-  }, { threshold: 0.1 });
+/* Reveal on scroll */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* Creator cards curtain reveal */
+const creatorObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('revealed'), 100);
+      creatorObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.25 });
+document.querySelectorAll('.creator-card').forEach(c => creatorObs.observe(c));
+
+/* Counter animation */
+function animateCounter(el, target, duration = 1500) {
+  let start = 0;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 4);
+    el.textContent = Math.floor(eased * target) + (el.dataset.suffix || '');
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target + (el.dataset.suffix || '');
+  };
+  requestAnimationFrame(step);
+}
+
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const target = parseInt(e.target.dataset.count);
+      if (!isNaN(target)) animateCounter(e.target, target);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+/* Form submit */
+function handleForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = '✓ Recibido — Te contactamos pronto';
+  btn.style.background = '#1a1a1a';
+  btn.style.color = 'white';
+  btn.disabled = true;
+}
 </script>
 
 </body>
