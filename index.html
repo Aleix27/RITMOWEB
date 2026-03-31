@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="RITMO – El festival de música urbana que no entiende de géneros. Solo de ritmo. Reggaeton, Tech House, Techno. El golpe al cambio."/>
+<title>RITMO – El Golpe al Cambio</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "ritmo-orange": "#FF5F00",
+          "ritmo-black": "#0A0A0A",
+          "ritmo-white": "#FFFFFF",
+        },
+        fontFamily: {
+          "headline": ["Manrope", "sans-serif"],
+          "body": ["Inter", "sans-serif"],
+          "mono": ["Space Grotesk", "monospace"],
+        },
+      },
+    },
+  }
+</script>
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #FF5F00;
+    color: #0A0A0A;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Blueprint grid */
+  .blueprint-grid {
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Diagonal stripes */
+  .diagonal-stripes {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(0,0,0,0.06) 8px,
+      rgba(0,0,0,0.06) 16px
+    );
+  }
+
+  /* Stencil outline text */
+  .stencil-text {
+    -webkit-text-stroke: 2px #0A0A0A;
+    color: transparent;
+    letter-spacing: -0.04em;
+  }
+  .stencil-text-white {
+    -webkit-text-stroke: 2px #FF5F00;
+    color: transparent;
+  }
+
+  /* Nav */
+  .nav-link {
+    font-weight: 900;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #0A0A0A;
+    transition: opacity 0.2s;
+  }
+  .nav-link:hover { opacity: 0.5; }
+
+  /* Rotating badge */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .spinning { animation: spin-slow 12s linear infinite; }
+
+  /* Marquee */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .marquee-inner {
+    display: flex;
+    width: max-content;
+    animation: marquee 18s linear infinite;
+  }
+  .marquee-inner:hover { animation-play-state: paused; }
+
+  /* Pulse dot */
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+  /* Card hover */
+  .tilt-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .tilt-card:hover {
+    transform: rotate(0deg) translateY(-4px) !important;
+    box-shadow: 8px 8px 0px #0A0A0A;
+  }
+
+  /* Section separator */
+  .sep-line {
+    width: 100%;
+    height: 2px;
+    background: rgba(0,0,0,0.12);
+  }
+
+  /* Button */
+  .btn-black {
+    background: #0A0A0A;
+    color: #FF5F00;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 14px 32px;
+    display: inline-block;
+    text-decoration: none;
+    border: 2px solid #0A0A0A;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-black:hover {
+    background: transparent;
+    color: #0A0A0A;
+  }
+  .btn-orange {
+    background: #FF5F00;
+    color: #0A0A0A;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 14px 32px;
+    display: inline-block;
+    text-decoration: none;
+    border: 2px solid #FF5F00;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-orange:hover {
+    background: transparent;
+    color: #FF5F00;
+  }
+
+  /* Mobile hamburger */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: flex; }
+
+  /* Photo overlay */
+  .photo-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+  }
+
+  /* Genre tag */
+  .genre-tag {
+    border: 2px solid rgba(0,0,0,0.3);
+    background: transparent;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 16px;
+    font-size: 0.75rem;
+  }
+</style>
+</head>
+<body class="blueprint-grid">
+
+<!-- =================== FIXED NAV =================== -->
+<nav class="fixed top-0 left-0 right-0 z-[100] bg-ritmo-orange border-b-2 border-black/10 backdrop-blur-sm">
+  <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+    <a href="#hero" class="text-3xl font-black tracking-tighter leading-none" style="font-family:'Manrope',sans-serif;">RITMO</a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a class="nav-link" href="#concepto">Concepto</a>
+      <a class="nav-link" href="#musica">Música</a>
+      <a class="nav-link" href="#creadores">Creadores</a>
+      <a class="nav-link" href="#formato">Formato</a>
+      <a class="nav-link" href="#contacto">Contacto</a>
+      <a class="btn-black text-sm" href="#contacto">Colabora con nosotros</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="burger-btn" class="md:hidden flex flex-col gap-1.5 cursor-pointer p-2">
+      <span class="w-6 h-0.5 bg-black block"></span>
+      <span class="w-6 h-0.5 bg-black block"></span>
+      <span class="w-6 h-0.5 bg-black block"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="flex-col gap-0 bg-ritmo-black text-ritmo-orange px-5 py-6 border-t-2 border-black/20">
+    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#concepto" onclick="closeMobileMenu()">Concepto</a>
+    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#musica" onclick="closeMobileMenu()">Música</a>
+    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#creadores" onclick="closeMobileMenu()">Creadores</a>
+    <a class="block py-3 text-xl font-black uppercase tracking-widest border-b border-white/10" href="#formato" onclick="closeMobileMenu()">Formato</a>
+    <a class="block py-3 text-xl font-black uppercase tracking-widest" href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+    <a class="btn-black mt-5 text-center w-full block" href="#contacto" onclick="closeMobileMenu()">Colabora</a>
+  </div>
+</nav>
+
+<!-- =================== HERO =================== -->
+<section id="hero" class="relative min-h-screen flex flex-col justify-end pt-24 pb-12 px-5 md:px-12 overflow-hidden">
+
+  <!-- Background stencil text -->
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+    <span class="stencil-text font-black leading-none text-[28vw] md:text-[22vw] opacity-15 tracking-tighter" style="font-family:'Manrope',sans-serif;">RITMO</span>
+  </div>
+
+  <!-- Diagonal decorative lines -->
+  <div class="absolute top-0 right-0 w-1/2 h-full diagonal-stripes opacity-30 pointer-events-none"></div>
+
+  <!-- Spinning badge -->
+  <div class="absolute top-28 right-5 md:top-32 md:right-16 w-28 h-28 md:w-36 md:h-36">
+    <div class="relative w-full h-full">
+      <svg class="spinning w-full h-full" viewBox="0 0 100 100">
+        <path id="circle-text" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
+        <text font-family="Inter, sans-serif" font-weight="900" font-size="11" fill="#0A0A0A" letter-spacing="3">
+          <textPath href="#circle-text">EL GOLPE AL CAMBIO · RITMO · EL GOLPE AL CAMBIO ·</textPath>
+        </text>
+      </svg>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-10 h-10 bg-ritmo-black rounded-full flex items-center justify-center">
+          <div class="w-3 h-3 bg-ritmo-orange rounded-full pulse-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main hero content -->
+  <div class="relative z-10 max-w-7xl mx-auto w-full">
+
+    <div class="mb-6">
+      <span class="text-xs font-mono tracking-[0.3em] uppercase opacity-60 bg-black/10 px-3 py-1 inline-block">EST. 2024 // FESTIVAL DE MÚSICA URBANA</span>
+    </div>
+
+    <h1 class="font-black uppercase leading-[0.82] tracking-tighter text-[16vw] md:text-[11vw] mb-8" style="font-family:'Manrope',sans-serif;">
+      EL<br/>GOLPE<br/>AL<br/>CAMBIO
+    </h1>
+
+    <div class="flex flex-col md:flex-row md:items-end gap-6 md:gap-16">
+      <div class="max-w-md">
+        <p class="text-lg md:text-xl font-bold leading-snug">
+          No importa el género. No importa el año.<br/>No importa la temporada.<br/><strong>Lo único que importa es el ritmo.</strong>
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a class="btn-black" href="#concepto">Descubre RITMO</a>
+        <a class="btn-black" href="#contacto" style="background:transparent; color:#0A0A0A;">Colabora con nosotros →</a>
+      </div>
+    </div>
+
+    <!-- Genre pills -->
+    <div class="flex flex-wrap gap-2 mt-10">
+      <span class="genre-tag">Reggaeton</span>
+      <span class="genre-tag">Tech House</span>
+      <span class="genre-tag">Techno</span>
+      <span class="genre-tag">Urban</span>
+      <span class="genre-tag">+ Lo que mueva</span>
+    </div>
+  </div>
+</section>
+
+<!-- =================== MARQUEE =================== -->
+<div class="overflow-hidden bg-ritmo-black py-4 border-y-2 border-black/40">
+  <div class="marquee-inner">
+    <span class="text-ritmo-orange font-black text-3xl md:text-5xl uppercase tracking-tight whitespace-nowrap px-8" style="font-family:'Manrope',sans-serif;">
+      RITMO &nbsp;·&nbsp; EL GOLPE AL CAMBIO &nbsp;·&nbsp; REGGAETON &nbsp;·&nbsp; TECH HOUSE &nbsp;·&nbsp; TECHNO &nbsp;·&nbsp; URBAN &nbsp;·&nbsp;
+    </span>
+    <span class="text-ritmo-orange font-black text-3xl md:text-5xl uppercase tracking-tight whitespace-nowrap px-8" style="font-family:'Manrope',sans-serif;">
+      RITMO &nbsp;·&nbsp; EL GOLPE AL CAMBIO &nbsp;·&nbsp; REGGAETON &nbsp;·&nbsp; TECH HOUSE &nbsp;·&nbsp; TECHNO &nbsp;·&nbsp; URBAN &nbsp;·&nbsp;
+    </span>
+  </div>
+</div>
+
+<!-- =================== CONCEPTO =================== -->
+<section id="concepto" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Label -->
+    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 mb-6">01 // CONCEPTO</p>
+
+    <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-start">
+      <div>
+        <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-8" style="font-family:'Manrope',sans-serif;">
+          QUÉ ES<br/>RITMO
+        </h2>
+        <div class="bg-ritmo-black text-ritmo-orange p-8 md:p-10 border-l-8 border-ritmo-orange -rotate-1 tilt-card">
+          <p class="text-xl md:text-2xl font-bold leading-snug">
+            "RITMO no es un festival más. Es una declaración. Un golpe directo al status quo de lo que ya existe en la escena musical."
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-6 mt-4 md:mt-16">
+        <div class="border-2 border-black/20 p-6 bg-white/30 backdrop-blur-sm">
+          <div class="flex items-start gap-4">
+            <span class="text-4xl font-black opacity-20 leading-none">01</span>
+            <div>
+              <h3 class="font-black text-lg uppercase tracking-tight mb-2">El Ritmo por encima de todo</h3>
+              <p class="text-sm leading-relaxed opacity-80">En RITMO, el género es irrelevante. Reggaeton, tech house, techno, o lo que sea — si mueve el cuerpo, pertenece aquí. El único criterio es que la gente no pare de bailar.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-2 border-black/20 p-6 bg-white/30 backdrop-blur-sm rotate-1 tilt-card">
+          <div class="flex items-start gap-4">
+            <span class="text-4xl font-black opacity-20 leading-none">02</span>
+            <div>
+              <h3 class="font-black text-lg uppercase tracking-tight mb-2">La energía ante todo</h3>
+              <p class="text-sm leading-relaxed opacity-80">El objetivo principal del festival es que la gente esté animada, con energía, disfrutando. No hay reglas de protocolo. Hay libertad total dentro del ritmo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-2 border-black/20 p-6 bg-white/30 backdrop-blur-sm -rotate-1 tilt-card">
+          <div class="flex items-start gap-4">
+            <span class="text-4xl font-black opacity-20 leading-none">03</span>
+            <div>
+              <h3 class="font-black text-lg uppercase tracking-tight mb-2">Diferente a todo lo que existe</h3>
+              <p class="text-sm leading-relaxed opacity-80">Mientras otros festivales se encasillan en un género o un estilo, RITMO rompe esas fronteras. Aquí conviven mundos sonoros que nunca habían compartido escenario.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =================== MÚSICA =================== -->
+<section id="musica" class="relative bg-ritmo-black text-ritmo-white py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+
+    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-40 mb-6 text-ritmo-orange">02 // LA MÚSICA</p>
+
+    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-4 text-ritmo-white" style="font-family:'Manrope',sans-serif;">
+      UN FESTIVAL,<br/>TODOS LOS RITMOS
+    </h2>
+
+    <p class="text-ritmo-orange text-lg md:text-xl font-bold mb-16 max-w-xl">
+      Porque el ritmo no tiene fronteras. Cada sesión es una experiencia única, sin ataduras de género ni de estilo.
+    </p>
+
+    <!-- Genre cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t-2 border-white/10">
+
+      <div class="p-8 md:p-10 border-b-2 md:border-b-0 md:border-r-2 border-white/10 group hover:bg-ritmo-orange transition-colors duration-300">
+        <div class="text-[60px] mb-4 group-hover:scale-110 transition-transform duration-300">🔥</div>
+        <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter mb-3 group-hover:text-ritmo-black transition-colors" style="font-family:'Manrope',sans-serif;">Reggaeton</h3>
+        <p class="text-sm opacity-60 group-hover:opacity-100 group-hover:text-ritmo-black leading-relaxed transition-colors">El perreo, el flow, la calle. El género que conquistó el mundo entero sin pedir permiso. La base de lo urbano.</p>
+        <div class="mt-6 text-xs font-mono opacity-40 group-hover:opacity-70 group-hover:text-ritmo-black transition-colors uppercase tracking-widest">URBAN · LATIN · FLOW</div>
+      </div>
+
+      <div class="p-8 md:p-10 border-b-2 md:border-b-0 md:border-r-2 border-white/10 group hover:bg-ritmo-orange transition-colors duration-300">
+        <div class="text-[60px] mb-4 group-hover:scale-110 transition-transform duration-300">⚡</div>
+        <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter mb-3 group-hover:text-ritmo-black transition-colors" style="font-family:'Manrope',sans-serif;">Tech House</h3>
+        <p class="text-sm opacity-60 group-hover:opacity-100 group-hover:text-ritmo-black leading-relaxed transition-colors">El groove que te atrapa y no te suelta. Basslines profundas, hi-hats afilados, energía constante de principio a fin.</p>
+        <div class="mt-6 text-xs font-mono opacity-40 group-hover:opacity-70 group-hover:text-ritmo-black transition-colors uppercase tracking-widest">GROOVE · BASS · ENERGY</div>
+      </div>
+
+      <div class="p-8 md:p-10 group hover:bg-ritmo-orange transition-colors duration-300">
+        <div class="text-[60px] mb-4 group-hover:scale-110 transition-transform duration-300">🖤</div>
+        <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter mb-3 group-hover:text-ritmo-black transition-colors" style="font-family:'Manrope',sans-serif;">Techno</h3>
+        <p class="text-sm opacity-60 group-hover:opacity-100 group-hover:text-ritmo-black leading-relaxed transition-colors">El trance de los kick drums. La experiencia sonora más cruda e hipnótica. El techno que te lleva a otro estado mental.</p>
+        <div class="mt-6 text-xs font-mono opacity-40 group-hover:opacity-70 group-hover:text-ritmo-black transition-colors uppercase tracking-widest">INDUSTRIAL · DARK · TRANCE</div>
+      </div>
+    </div>
+
+    <!-- Big statement -->
+    <div class="mt-16 border-2 border-ritmo-orange p-8 md:p-12 relative overflow-hidden">
+      <div class="absolute inset-0 diagonal-stripes opacity-10 pointer-events-none"></div>
+      <p class="text-ritmo-orange font-black text-2xl md:text-4xl leading-tight tracking-tighter relative z-10" style="font-family:'Manrope',sans-serif;">
+        "Si tiene ritmo, tiene cabida en RITMO."
+      </p>
+      <p class="text-white/50 text-sm mt-4 font-mono uppercase tracking-widest">— FILOSOFÍA DEL FESTIVAL</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- =================== CREADORES =================== -->
+<section id="creadores" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 mb-6">03 // LOS CREADORES</p>
+
+    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-16" style="font-family:'Manrope',sans-serif;">
+      QUIÉNES<br/>SOMOS
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+
+      <!-- Aleix -->
+      <div class="group">
+        <div class="relative overflow-hidden border-4 border-black aspect-[3/4] bg-black">
+          <img
+            src="images/aleix.jpeg"
+            alt="Aleix Carles – DJ & Co-Fundador de RITMO"
+            class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+            style="object-position: center 20%;"
+          />
+          <div class="photo-overlay absolute inset-0"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <p class="font-mono text-xs tracking-widest uppercase opacity-60 mb-1">Co-Fundador · DJ Principal</p>
+            <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-tight" style="font-family:'Manrope',sans-serif;">Aleix<br/>Carles</h3>
+          </div>
+          <div class="absolute top-4 right-4 bg-ritmo-orange text-black font-black text-xs px-3 py-1 rotate-3">FOUNDER</div>
+        </div>
+        <div class="mt-4 p-5 bg-black/5 border-l-4 border-ritmo-orange">
+          <p class="text-sm leading-relaxed opacity-80">Co-fundador y DJ principal de RITMO. Su selección musical cruza fronteras entre el reggaeton más crudo y las sesiones de tech house más elegantes. La mente detrás del concepto.</p>
+        </div>
+      </div>
+
+      <!-- Pol -->
+      <div class="group md:mt-12">
+        <div class="relative overflow-hidden border-4 border-black aspect-[3/4] bg-black">
+          <img
+            src="images/pol.jpeg"
+            alt="Pol Vidal – DJ & Co-Fundador de RITMO"
+            class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+            style="object-position: center 20%;"
+          />
+          <div class="photo-overlay absolute inset-0"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <p class="font-mono text-xs tracking-widest uppercase opacity-60 mb-1">Co-Fundador · DJ Principal</p>
+            <h3 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-tight" style="font-family:'Manrope',sans-serif;">Pol<br/>Vidal</h3>
+          </div>
+          <div class="absolute top-4 right-4 bg-ritmo-orange text-black font-black text-xs px-3 py-1 -rotate-2">FOUNDER</div>
+        </div>
+        <div class="mt-4 p-5 bg-black/5 border-l-4 border-ritmo-orange">
+          <p class="text-sm leading-relaxed opacity-80">Co-fundador y DJ principal de RITMO. Especialista en techno y tech house, Pol construye atmósferas que hipnotizan al público desde el primer beat hasta el último.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Together statement -->
+    <div class="mt-16 text-center">
+      <div class="inline-block border-4 border-black p-8 md:p-12 -rotate-1 bg-white/40 tilt-card">
+        <p class="font-black text-xl md:text-2xl uppercase tracking-tight" style="font-family:'Manrope',sans-serif;">Juntos, han creado algo que la escena nunca ha visto.</p>
+        <p class="text-sm font-mono opacity-50 mt-2 uppercase tracking-widest">Aleix Carles + Pol Vidal = RITMO</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =================== FORMATO =================== -->
+<section id="formato" class="relative bg-ritmo-black text-ritmo-white py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
+
+  <!-- Big stencil background -->
+  <div class="absolute right-0 bottom-0 select-none pointer-events-none overflow-hidden">
+    <span class="font-black text-[20vw] opacity-5 leading-none stencil-text-white" style="font-family:'Manrope',sans-serif;">FMT</span>
+  </div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+
+    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-40 mb-6 text-ritmo-orange">04 // EL FORMATO</p>
+
+    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-4" style="font-family:'Manrope',sans-serif;">
+      SIEMPRE<br/>EN MOVIMIENTO
+    </h2>
+
+    <p class="text-ritmo-orange text-lg md:text-xl font-bold mb-16 max-w-2xl">
+      RITMO no tiene un lugar fijo. El festival viaja, se adapta, conquista nuevos espacios. Cada edición es una experiencia única en un lugar único.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="border-2 border-white/10 p-7 hover:border-ritmo-orange transition-colors duration-300">
+        <div class="text-ritmo-orange text-5xl mb-5 font-black" style="font-family:'Manrope',sans-serif;">01</div>
+        <h3 class="font-black text-xl uppercase tracking-tight mb-3">Venues Rotativos</h3>
+        <p class="text-sm text-white/60 leading-relaxed">El festival se desplaza por diferentes espacios en cada edición. Clubs, naves industriales, espacios al aire libre, almacenes — cualquier lugar que tenga potencial.</p>
+      </div>
+
+      <div class="border-2 border-white/10 p-7 hover:border-ritmo-orange transition-colors duration-300">
+        <div class="text-ritmo-orange text-5xl mb-5 font-black" style="font-family:'Manrope',sans-serif;">02</div>
+        <h3 class="font-black text-xl uppercase tracking-tight mb-3">Experiencia Exclusiva</h3>
+        <p class="text-sm text-white/60 leading-relaxed">Cada edición es irrepetible. El lugar cambia, el ambiente cambia, pero la esencia permanece: ritmo y energía sin límites.</p>
+      </div>
+
+      <div class="border-2 border-white/10 p-7 hover:border-ritmo-orange transition-colors duration-300">
+        <div class="text-ritmo-orange text-5xl mb-5 font-black" style="font-family:'Manrope',sans-serif;">03</div>
+        <h3 class="font-black text-xl uppercase tracking-tight mb-3">Producción Completa</h3>
+        <p class="text-sm text-white/60 leading-relaxed">Nos encargamos de toda la producción, el sonido, las luces y la comunicación. El venue solo necesita abrir sus puertas.</p>
+      </div>
+
+    </div>
+
+    <!-- Rotating venue visual -->
+    <div class="mt-16 flex flex-col md:flex-row items-center gap-8 border-t-2 border-white/10 pt-12">
+      <div class="text-center md:text-left">
+        <div class="inline-flex flex-wrap gap-2 justify-center md:justify-start">
+          <span class="border-2 border-ritmo-orange text-ritmo-orange px-4 py-2 text-xs font-mono uppercase tracking-widest">Club nocturno</span>
+          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Nave industrial</span>
+          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Espacio abierto</span>
+          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Rooftop</span>
+          <span class="border-2 border-white/30 text-white/50 px-4 py-2 text-xs font-mono uppercase tracking-widest">Almacén</span>
+          <span class="border-2 border-ritmo-orange/40 text-ritmo-orange/60 px-4 py-2 text-xs font-mono uppercase tracking-widest">¿Tu local?</span>
+        </div>
+        <p class="text-white/40 text-xs font-mono mt-4 uppercase tracking-widest">Cada edición. Un lugar diferente.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =================== POR QUÉ COLABORAR =================== -->
+<section class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 mb-6">05 // POR QUÉ COLABORAR</p>
+
+    <h2 class="font-black uppercase text-[12vw] md:text-[6vw] leading-[0.85] tracking-tighter mb-16" style="font-family:'Manrope',sans-serif;">
+      QUÉ GANÁIS<br/>CON RITMO
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div class="bg-ritmo-black text-ritmo-white p-8 md:p-10 border-b-4 border-ritmo-orange tilt-card rotate-1">
+        <h3 class="font-black text-2xl uppercase tracking-tight mb-4 text-ritmo-orange" style="font-family:'Manrope',sans-serif;">Aforo garantizado</h3>
+        <p class="text-white/70 leading-relaxed">RITMO genera una comunidad de seguidores fieles que siguen el festival allá donde vaya. Cada edición lleva un público joven, activo y con ganas de consumir.</p>
+      </div>
+
+      <div class="bg-white/40 border-2 border-black/20 p-8 md:p-10 tilt-card -rotate-1">
+        <h3 class="font-black text-2xl uppercase tracking-tight mb-4" style="font-family:'Manrope',sans-serif;">Visibilidad de marca</h3>
+        <p class="leading-relaxed opacity-70">Tu espacio aparece en toda la comunicación del festival: redes sociales, flyers, prensa. Asociar tu venue con RITMO te posiciona como referente de la escena.</p>
+      </div>
+
+      <div class="bg-white/40 border-2 border-black/20 p-8 md:p-10 tilt-card rotate-1">
+        <h3 class="font-black text-2xl uppercase tracking-tight mb-4" style="font-family:'Manrope',sans-serif;">Cero quebraderos de cabeza</h3>
+        <p class="leading-relaxed opacity-70">Nosotros gestionamos la producción completa: sonido, iluminación, artistas, comunicación y taquilla. Vosotros ponéis el espacio, nosotros el resto.</p>
+      </div>
+
+      <div class="bg-ritmo-black text-ritmo-white p-8 md:p-10 border-b-4 border-ritmo-orange tilt-card -rotate-1">
+        <h3 class="font-black text-2xl uppercase tracking-tight mb-4 text-ritmo-orange" style="font-family:'Manrope',sans-serif;">Algo diferente</h3>
+        <p class="text-white/70 leading-relaxed">No traemos lo de siempre. Traemos un festival que rompe moldes, mezcla géneros y crea experiencias que la gente recuerda. Eso es lo que representa tu venue cuando acoge RITMO.</p>
+      </div>
+
+    </div>
+
+    <!-- Numbers -->
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-0 border-4 border-black overflow-hidden">
+      <div class="p-6 md:p-8 border-r-2 border-black text-center">
+        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">100%</div>
+        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Producción a cargo de RITMO</div>
+      </div>
+      <div class="p-6 md:p-8 border-r-2 border-black text-center">
+        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">0€</div>
+        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Coste de producción para el venue</div>
+      </div>
+      <div class="p-6 md:p-8 border-r-2 border-black text-center">
+        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">3+</div>
+        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Géneros musicales por edición</div>
+      </div>
+      <div class="p-6 md:p-8 text-center">
+        <div class="font-black text-5xl md:text-6xl leading-none mb-2" style="font-family:'Manrope',sans-serif;">∞</div>
+        <div class="text-xs font-mono uppercase tracking-widest opacity-60">Energía en pista</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =================== CONTACTO =================== -->
+<section id="contacto" class="relative bg-ritmo-black text-ritmo-white py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="absolute inset-0 diagonal-stripes opacity-5 pointer-events-none"></div>
+
+  <!-- Big stencil RITMO -->
+  <div class="absolute -bottom-10 -right-10 select-none pointer-events-none overflow-hidden">
+    <span class="font-black leading-none opacity-[0.04]" style="font-family:'Manrope',sans-serif; font-size: 25vw; color: white;">R</span>
+  </div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+
+    <p class="font-mono text-[10px] uppercase tracking-[0.3em] opacity-40 mb-6 text-ritmo-orange">06 // CONTACTO</p>
+
+    <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-start">
+      <div>
+        <h2 class="font-black uppercase text-[14vw] md:text-[7vw] leading-[0.85] tracking-tighter mb-8" style="font-family:'Manrope',sans-serif;">
+          HABLEMOS
+        </h2>
+        <p class="text-white/60 text-lg leading-relaxed mb-8">
+          ¿Tienes un espacio que podría acoger RITMO? ¿Quieres colaborar con el festival? Cuéntanos todo. Estamos construyendo algo grande y queremos hacerlo con los mejores venues.
+        </p>
+
+        <div class="flex flex-col gap-4">
+          <a href="mailto:contacto@ritmo-festival.com" class="flex items-center gap-4 group">
+            <div class="w-10 h-10 border-2 border-ritmo-orange flex items-center justify-center shrink-0 group-hover:bg-ritmo-orange transition-colors">
+              <span class="text-ritmo-orange group-hover:text-black text-lg">@</span>
+            </div>
+            <span class="text-white/80 group-hover:text-ritmo-orange transition-colors font-mono text-sm tracking-wide">contacto@ritmo-festival.com</span>
+          </a>
+          <a href="https://instagram.com/ritmofestival" target="_blank" rel="noopener" class="flex items-center gap-4 group">
+            <div class="w-10 h-10 border-2 border-white/20 flex items-center justify-center shrink-0 group-hover:border-ritmo-orange transition-colors">
+              <span class="text-white/60 group-hover:text-ritmo-orange text-sm font-bold transition-colors">IG</span>
+            </div>
+            <span class="text-white/50 group-hover:text-ritmo-orange transition-colors font-mono text-sm tracking-wide">@ritmofestival</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div class="bg-white/5 border-2 border-white/10 p-8 md:p-10">
+        <h3 class="font-black uppercase text-xl tracking-tight mb-6 text-ritmo-orange">Propón tu espacio</h3>
+        <form class="flex flex-col gap-4" onsubmit="handleForm(event)">
+          <div>
+            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Nombre / Venue</label>
+            <input
+              type="text"
+              placeholder="Nombre del local o persona de contacto"
+              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Email</label>
+            <input
+              type="email"
+              placeholder="tu@email.com"
+              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Localización</label>
+            <input
+              type="text"
+              placeholder="Ciudad / Dirección aproximada"
+              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label class="font-mono text-xs uppercase tracking-widest opacity-50 mb-2 block">Cuéntanos más</label>
+            <textarea
+              rows="4"
+              placeholder="Aforo estimado, tipo de espacio, disponibilidad..."
+              class="w-full bg-transparent border-2 border-white/20 text-white placeholder:text-white/30 px-4 py-3 text-sm focus:border-ritmo-orange focus:outline-none transition-colors resize-none"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn-orange text-center w-full font-black text-sm tracking-widest mt-2">
+            Enviar propuesta →
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer class="bg-ritmo-black text-ritmo-white pt-16 pb-10 px-5 md:px-12 relative overflow-hidden border-t-4 border-ritmo-orange">
+  <div class="absolute -bottom-10 left-0 select-none pointer-events-none">
+    <span class="font-black leading-none opacity-[0.04]" style="font-family:'Manrope',sans-serif; font-size: 30vw; color: white;">RITMO</span>
+  </div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
+      <div>
+        <h2 class="font-black text-6xl md:text-8xl tracking-tighter leading-none mb-4" style="font-family:'Manrope',sans-serif;">RITMO</h2>
+        <p class="text-white/40 font-mono text-xs uppercase tracking-[0.3em]">El Golpe al Cambio · EST. 2024</p>
+      </div>
+      <div class="flex flex-col gap-2 text-right">
+        <a href="#concepto" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Concepto</a>
+        <a href="#musica" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Música</a>
+        <a href="#creadores" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Creadores</a>
+        <a href="#formato" class="text-white/50 hover:text-ritmo-orange transition-colors font-mono text-sm uppercase tracking-widest">Formato</a>
+        <a href="#contacto" class="text-ritmo-orange hover:opacity-70 transition-opacity font-mono text-sm uppercase tracking-widest">Contacto</a>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-white/30 font-mono text-[10px] uppercase tracking-widest">© 2024 RITMO Festival · Aleix Carles & Pol Vidal</p>
+      <div class="flex gap-6">
+        <a href="https://instagram.com/ritmofestival" target="_blank" rel="noopener" class="text-white/40 hover:text-ritmo-orange transition-colors font-mono text-xs uppercase tracking-widest">Instagram</a>
+        <a href="mailto:contacto@ritmo-festival.com" class="text-white/40 hover:text-ritmo-orange transition-colors font-mono text-xs uppercase tracking-widest">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  const burgerBtn = document.getElementById('burger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  burgerBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+  }
+
+  // Smooth scroll offset for fixed nav
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        const navHeight = document.querySelector('nav').offsetHeight;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Form handler
+  function handleForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = '✓ Mensaje enviado — Te contactamos pronto';
+    btn.style.background = '#1a1a1a';
+    btn.style.cursor = 'default';
+    btn.disabled = true;
+  }
+
+  // Intersection observer for subtle entrance animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = entry.target.dataset.transform || 'none';
+      }
+    });
+  }, { threshold: 0.1 });
+</script>
+
+</body>
+</html>
